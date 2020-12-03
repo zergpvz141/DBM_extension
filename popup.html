@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href="style.css" type="text/css" re1="stylesheet"/>
+    <link href="CSS/fontawesome-free-5.15.1-web/css/all.css" rel="stylesheet">
+  </head>
+  <style>
+    .ifContainer iframe{
+      border: none;padding: 0px;
+    }
+    #gl,#cp,#lo,#info,#item{
+      display :none;
+    }
+  </style>
+  <body>
+  <div class='popList'>
+    <img src="main_logo.jpg" width="250" height="57" />
+  <div class='listItem' id="gl">
+    <i class="fas fa-sign-in-alt"></i>
+    <a href="https://www-student.cse.buffalo.edu/dontbuyme/login.php" target="_blank">
+      Google login
+    </a>
+    <br>
+  </div >
+    <div class='listItem container' id="info">
+      </div>
+    </div>
+  <div class='listItem container' id="cp">
+    <i class="fas fa-home "></i>
+    <a class="display-2" href="https://www-student.cse.buffalo.edu/dontbuyme/control_panel.php" target="_blank">Control Panel</a>
+    <hr>
+  </div>
+  <div class='listItem' id="lo">
+    <i class="fas fa-sign-out-alt"></i>
+    <a onclick="refreshFunction();" href="https://www-student.cse.buffalo.edu/dontbuyme/logout.php" target="_blank">
+      Log Out
+    </a>
+  </div>
+  <div class='listItem' id="id1">
+    <hr>
+  </div>
+  </div>
+  </body>
+  <script src="popup.js"></script>
+</html>
