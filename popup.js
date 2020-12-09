@@ -22,7 +22,7 @@ function lookupResult(c="",t="",i="",cate=""){
             if(myObj.name !=" "){
                 document.getElementById("gl").style.display = "none";
                 document.getElementById("info").style.display = "block";
-                document.getElementById("info").innerHTML = "User: "+myObj.email+'<hr>';
+                document.getElementById("info").innerHTML = "<h3>"+myObj.email+'</h3><hr>';
                 document.getElementById("cp").style.display = "block";
                 document.getElementById("lo").style.display = "block";
                 document.getElementById("id1").style.display = "none";

@@ -17,7 +17,7 @@
 //   itemInfo();
 // }
 // i = "yes" ,"no","maybe"
-  function itemOwningStatus(i,mode="",num="") {
+  function itemOwningStatus(i,mode="",num=0) {
 
     if(mode==""){
       var titleElement = document.getElementById("title");
@@ -28,15 +28,19 @@
     insertAfter(breakLine, titleElement);
     if (i == "yes") {
       t_border = "red";
-      content = "Already Have It!!";
+      content = "Already Have It!! <img class='DBMNotFound' width=\"20\" height=\"20\">";
     } else {
       if (i == "no") {
         t_border = "green";
-        content = "Not In Collection";
+        content = "Not In Collection <img class='DBMNotFound' width=\"20px\" height=\"20px\">";
 
         var addButton = document.createElement("button");
         addButton.value = num;
         addButton.classList.add("DBM_button");
+        addButton.style.backgroundColor='#FEBD69';
+        addButton.style.border="1px";
+        addButton.style.padding="5px 10px";
+        addButton.style.color="white";
         addButton.innerHTML = "Add to Collection";
         addButton.onclick = function (e) {
           // var wnd = window.open("https://www-student.cse.buffalo.edu/dontbuyme/upload.php?UPC=222222");
@@ -51,11 +55,12 @@
               var addButton_after = document.getElementsByClassName('DBM_button')[0];
               var label = document.getElementsByClassName("DBM_label")[0];
               if(upResultList[0]==true){
-                label.innerHTML="Already Have It!!";
+                label.innerHTML="Already Have It!!<img class='DBMNotFound' width=\"20px\" height=\"20px\">";
                 label.style.color="red";
                 addButton_after.disabled = true;
                 addButton.innerHTML = "Successfully Added!";
-                addButton_after.style.color = "green";
+                addButton_after.style.color = "white";
+                document.getElementsByClassName("DBMNotFound")[num].src=chrome.extension.getURL("images/icon_logoRED.png");
               }else{
                 addButton.innerHTML = "Adding failed";
                 addButton_after.style.color = "red";
@@ -82,11 +87,12 @@
                 // var addButton_after = document.getElementsByClassName('DBM_button')[num];
                 if(upResultList[0]==true){
                   var label = document.getElementsByClassName("DBM_label")[num];
-                  label.innerHTML="Already Have It!!";
+                  label.innerHTML="Already Have It!!<img class='DBMNotFound' width=\"20px\" height=\"20px\">";
                   label.style.color="red";
                   addButton.disabled = true;
                   addButton.innerHTML = "Successfully Added!";
-                  addButton.style.color = "green";
+                  addButton.style.color = "white";
+                  document.getElementsByClassName("DBMNotFound")[num].src=chrome.extension.getURL("images/icon_logoRED.png");
                 }else{
                   addButton.innerHTML = "Adding failed";
                   addButton.style.color = "red";
@@ -128,15 +134,21 @@
 
       if (i != "maybe") {
         var para = document.createElement("H2");
-        para.innerText = content;
+        para.innerHTML = content;
         para.classList.add("DBM_label");
         para.style.color = t_border;
         var newLine = document.createElement("br");
         var breakLine = document.createElement("hr");
         insertAfter(para, titleElement);
         insertAfter(newLine, titleElement);
-      }
 
+        if(i=='yes'){
+          document.getElementsByClassName("DBMNotFound")[num].src=chrome.extension.getURL("images/icon_logoRED.png");
+        }
+        else if(i=='no'){
+          document.getElementsByClassName("DBMNotFound")[num].src=chrome.extension.getURL("images/icon_logoGREEN.png");
+        }
+      }
   }
 
   function insertAfter(newNode, referenceNode) {
@@ -213,8 +225,9 @@
   console.log(window.location.toString());
 //order history adding
   if (window.location.toString().includes('order-history')) {
-    var orders = document.getElementsByClassName("a-fixed-left-grid-col a-col-right");
-    var ordersImg = document.getElementsByClassName("item-view-left-col-inner");
+    var itemContent = document.getElementById("yourOrdersContent");
+    var orders = itemContent.getElementsByClassName("a-fixed-left-grid-col a-col-right");
+    var ordersImg = itemContent.getElementsByClassName("item-view-left-col-inner");
     var orderLink = [];
     var odderImageLink=[];
     var DOMList=[];

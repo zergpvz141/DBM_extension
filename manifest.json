@@ -7,6 +7,11 @@
       "scripts": ["js/jquery-3.5.1.min.js","background.js"],
       "persistent": false
     },
+    "web_accessible_resources": [
+      "images/icon_logo.png",
+      "images/icon_logoRED.png",
+      "images/icon_logoGREEN.png"
+    ],
     "content_scripts": [
     {
       "matches": ["https://www.amazon.com/*"],
@@ -18,7 +23,11 @@
       },
       {
         "js": [ "js/jquery-3.5.1.min.js" ],
-        "matches": [ "http://*/*"]
+        "matches": [ "http://*/*","https://*/*"]
+      },
+      {
+        "js": [ "js/addon/js/bootstrap.min.js" ],
+        "matches": [ "http://*/*","https://*/*"]
       }
   ],
     "page_action": {

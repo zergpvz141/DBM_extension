@@ -5,16 +5,23 @@
     <link href="CSS/fontawesome-free-5.15.1-web/css/all.css" rel="stylesheet">
   </head>
   <style>
+    body{
+      background-color: #DCEEF1;
+      /*background-image: url('MegaTron.jpg');*/
+    }
     .ifContainer iframe{
       border: none;padding: 0px;
     }
     #gl,#cp,#lo,#info,#item{
       display :none;
     }
+    a{
+      text-decoration: none !important;
+    }
   </style>
   <body>
   <div class='popList'>
-    <img src="main_logo.jpg" width="250" height="57" />
+    <img src="images/main_logo.png" width="250" height="57" />
   <div class='listItem' id="gl">
     <i class="fas fa-sign-in-alt"></i>
     <a href="https://www-student.cse.buffalo.edu/dontbuyme/login.php" target="_blank">
@@ -33,7 +40,7 @@
   <div class='listItem' id="lo">
     <i class="fas fa-sign-out-alt"></i>
     <a onclick="refreshFunction();" href="https://www-student.cse.buffalo.edu/dontbuyme/logout.php" target="_blank">
-      Log Out
+      &nbsp;Log Out
     </a>
   </div>
   <div class='listItem' id="id1">
