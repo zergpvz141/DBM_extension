@@ -243,6 +243,9 @@
     var itemContent = document.getElementById("yourOrdersContent");
     var orders = itemContent.getElementsByClassName("a-fixed-left-grid-col a-col-right");
     var ordersImg = itemContent.getElementsByClassName("item-view-left-col-inner");
+    if(ordersImg.length==0){
+      ordersImg = itemContent.getElementsByClassName("a-col-left");
+    }
     var orderLink = [];
     var odderImageLink=[];
     var DOMList=[];
