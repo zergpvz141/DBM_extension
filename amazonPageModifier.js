@@ -47,7 +47,12 @@
           // e.preventDefault();
           if(mode ==""){
             infoList = checkDoc();
-            infoList.unshift(document.querySelector("#productTitle").textContent);
+            if(document.querySelector("#productSubtitle")!=null){
+              subtitle =document.querySelector("#productSubtitle").textContent;
+              infoList.unshift(document.querySelector("#productTitle").textContent+" "+subtitle);
+            }else{
+              infoList.unshift(document.querySelector("#productTitle").textContent);
+            }
             var port = chrome.runtime.connect({name: "upload"});
             port.postMessage({uploadList: infoList});
             port.onMessage.addListener(function (message, sender) {
@@ -71,7 +76,7 @@
             odderImageLink= getImgList();
 
             mode=DOMList[this.value];
-            console.log(odderImageLink);
+            // console.log(odderImageLink);
           //  adding from order history page
             var port = chrome.runtime.connect({name: "orderHistoryUpload"});
             oUrl = "https://www.amazon.com" + mode.getAttribute('href');
@@ -83,7 +88,7 @@
                 addButton.style.color = "red";
               }else{
                 var upResultList=message.uploadResultMsg;
-                console.log(upResultList);
+                // console.log(upResultList);
                 // var addButton_after = document.getElementsByClassName('DBM_button')[num];
                 if(upResultList[0]==true){
                   var label = document.getElementsByClassName("DBM_label")[num];
@@ -172,14 +177,14 @@
     if (doc.getElementById("ap_container") !== null||doc.getElementById("productTitle")!== null) {
       for (var i = 0; i < lookList.length; i++) {
         rlist = item_Info(doc,lookList[i]);
-        console.log(rlist);
+        // console.log(rlist);
         if (rlist[0] == true){
-          console.log(rlist);
+          // console.log(rlist);
           return [rlist[1][0], rlist[1][1], rlist[2], rlist[3]];
         }
       }
     } else {
-      console.log("not product");
+      // console.log("not product");
       return [];
     }
   }
@@ -189,14 +194,24 @@
     for (var i = 0; i < list.length; i++) {
       var sList = list[i];
       if (sList.innerText.includes(t)) {
-        console.log(sList.innerText);
+        // console.log(sList.innerText);
         if (doc.getElementById("landingImage") != null) {
           var imgLink = doc.getElementById("landingImage").src;
         } else if (doc.getElementById("imgBlkFront") != null) {
           var imgLink = doc.getElementById("imgBlkFront").src;
+        }else if (doc.getElementById("ebooksSitbLogo") != null){
+          // var imgLink = doc.getElementById("ebooks-img-canvas").getElementsByTagName("img")[1].src;
+          return [false, [], "", ""];
         }
         var cate = doc.querySelectorAll('[selected="selected"]')[0].innerText;
         if (cate.includes("CD")||cate.includes("Books")||cate.includes("Movies")){
+          return [true, result_Parse(sList.innerText), imgLink, cate];
+        }
+        cate=doc.getElementById("nav-subnav").getAttribute("data-category");
+        if(cate.includes("music")||cate.includes("books")||cate.includes("movies")){
+          if(cate.includes("music")){
+            cate = "CDs & Vinyl";
+          }
           return [true, result_Parse(sList.innerText), imgLink, cate];
         }
       }
@@ -222,7 +237,7 @@
   }
 
 
-  console.log(window.location.toString());
+  // console.log(window.location.toString());
 //order history adding
   if (window.location.toString().includes('order-history')) {
     var itemContent = document.getElementById("yourOrdersContent");
@@ -238,13 +253,13 @@
       DOMList.push(orderItems);
       orderLink.push("https://www.amazon.com" + orderItems.getAttribute('href'));
     }
-    console.log(orderLink);
+    // console.log(orderLink);
     var ASIN_list = ASIN_from_Url(orderLink)
-    console.log(ASIN_list);
+    // console.log(ASIN_list);
     var port = chrome.runtime.connect({name: "ASINLookup"});
     port.postMessage({full_info: ASIN_list});
     port.onMessage.addListener(function (message, sender) {
-      console.log(message.loginStatus);
+      // console.log(message.loginStatus);
       if(message.loginStatus=="yes"){
         for(var j=0; j<DOMList.length;j++){
           if(message.ASINResult[j]==false){
@@ -254,7 +269,6 @@
           }
         }
       }else{
-        console.log("here");
         itemOwningStatus('logout',document.getElementById('controlsContainer'));
       }
       // console.log(message.ASINResult);
@@ -262,15 +276,19 @@
   } else {
     //normal product page
     infoList = checkDoc();
-    console.log(infoList);
-    var port = chrome.runtime.connect({name: "lookup"});
-    port.postMessage({login_check: "check", info: infoList});
-    port.onMessage.addListener(function (message, sender) {
-      // if(message.greeting === "hello"){
-      console.log(message.result);
-      itemOwningStatus(message.result);
-      // }
-    });
+    // console.log(infoList);
+    if(infoList!=null){
+      if(infoList.length!=0){
+        var port = chrome.runtime.connect({name: "lookup"});
+        port.postMessage({login_check: "check", info: infoList});
+        port.onMessage.addListener(function (message, sender) {
+          // if(message.greeting === "hello"){
+          // console.log(message.result);
+          itemOwningStatus(message.result);
+          // }
+        });
+      }
+    }
   }
 
 

@@ -2,12 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-'use strict';
-
 chrome.runtime.onInstalled.addListener(function() {
-  chrome.storage.sync.set({color: '#3aa757'}, function() {
-    console.log("The color is green.");
-  });
       chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
       chrome.declarativeContent.onPageChanged.addRules([{
         conditions: [new chrome.declarativeContent.PageStateMatcher({
@@ -16,7 +11,6 @@ chrome.runtime.onInstalled.addListener(function() {
             actions: [new chrome.declarativeContent.ShowPageAction()]
       }]);
     });
-
 });
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
@@ -66,9 +60,11 @@ chrome.runtime.onConnect.addListener(function(port){
             var xhr = new XMLHttpRequest();
             var myObj = null;
             var url = "https://www-student.cse.buffalo.edu/dontbuyme/lookup.php";
-            if (infoList[0] != "" && infoList[1] != "") {
-                url = "https://www-student.cse.buffalo.edu/dontbuyme/lookup.php?" + infoList[0] + "=" + infoList[1];
-            }
+            // if(infoList!=null){
+                if (infoList[0] != "" && infoList[1] != "") {
+                    url = "https://www-student.cse.buffalo.edu/dontbuyme/lookup.php?" + infoList[0] + "=" + infoList[1];
+                }
+            // }
             console.log(url);
             xhr.open("GET", url, true);
             xhr.onreadystatechange = function () {
@@ -163,13 +159,19 @@ chrome.runtime.onConnect.addListener(function(port){
                     console.log(doc);
                     var infoList=checkDoc(doc);
                     console.log(infoList);
-                    if(infoList.length>=2){
-                        infoList.unshift(doc.querySelector("#productTitle").innerText);
-                        if(infoList[3].includes("data:image")){
-                            infoList[3]=getImg();
+                    if(infoList!=null){
+                        if(infoList.length>=2){
+                            if(document.querySelector("#productSubtitle")!=null){
+                                infoList.unshift(doc.querySelector("#productTitle").textContent+" "+doc.querySelector("#productSubtitle").textContent);
+                            }else{
+                                infoList.unshift(doc.querySelector("#productTitle").textContent);
+                            }
+                            if(infoList[3].includes("data:image")){
+                                infoList[3]=getImg();
+                            }
+                            console.log(infoList);
+                            uploadResult(port,infoList[0],infoList[1],infoList[2],infoList[3],infoList[4]);
                         }
-                        console.log(infoList);
-                        uploadResult(port,infoList[0],infoList[1],infoList[2],infoList[3],infoList[4]);
                     }
                     else{
                         port.postMessage({uploadResultMsg_invalid: true});
@@ -313,20 +315,24 @@ function uploadResult(port,title="",c="",t="",i="",cate=""){
     }
 
 }
-function checkDoc(doc) {
+function checkDoc(doc="") {
     var lookList = ["ASIN", "UPC", "ISBN-10", "ISBN-13"];
-    if (doc.getElementById("ap_container") !== null || doc.getElementById("dp-container") !== null ||doc.getElementById("dp") !== null ) {
+    if(doc==""){
+        doc=document;
+    }
+    if (doc.getElementById("ap_container") !== null||doc.getElementById("productTitle")!== null) {
         for (var i = 0; i < lookList.length; i++) {
             var rlist = item_Info(doc,lookList[i]);
-            if (rlist[0] == true) {
+            console.log(rlist);
+            if (rlist[0] == true){
                 console.log(rlist);
                 return [rlist[1][0], rlist[1][1], rlist[2], rlist[3]];
             }
         }
-    }
+    } else {
         console.log("not product");
         return [];
-
+    }
 }
 
 function item_Info(doc,t) {
@@ -339,9 +345,21 @@ function item_Info(doc,t) {
                 var imgLink = doc.getElementById("landingImage").src;
             } else if (doc.getElementById("imgBlkFront") != null) {
                 var imgLink = doc.getElementById("imgBlkFront").src;
+            }else if (doc.getElementById("ebooksSitbLogo") != null){
+                // var imgLink = doc.getElementById("ebooks-img-canvas").getElementsByTagName("img")[1].src;
+                return [false, [], "", ""];
             }
             var cate = doc.querySelectorAll('[selected="selected"]')[0].innerText;
-            return [true, result_Parse(sList.innerText), imgLink, cate];
+            if (cate.includes("CD")||cate.includes("Books")||cate.includes("Movies")){
+                return [true, result_Parse(sList.innerText), imgLink, cate];
+            }
+            cate=doc.getElementById("nav-subnav").getAttribute("data-category");
+            if(cate.includes("music")||cate.includes("books")||cate.includes("movies")){
+                if(cate.includes("music")){
+                    cate = "CDs & Vinyl";
+                }
+                return [true, result_Parse(sList.innerText), imgLink, cate];
+            }
         }
     }
     return [false, [], "", ""];
