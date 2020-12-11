@@ -187,30 +187,30 @@ function display_item (results){
     // document.querySelector("#id1").innerHTML = "<hr><p>tab title: " + tab_title + "</p><p>dom h111111: " + h1 + "</p>";
 }
     lookupResult();
-    var tab_title = '';
-    chrome.tabs.query({active: true,status:'loading' ,lastFocusedWindow: true}, function(tabs) {
-        var tab = tabs[0];
-        if (tab !=undefined){
-
-            tab_title = tab.title;
-            if(tab_title.includes("Amazon")){
-                chrome.tabs.executeScript(tab.id, {
-                    file: 'tabExecute.js'
-                }, display_item);
-            }
-        }
-    });
-    chrome.tabs.query({active: true,status:'complete' ,lastFocusedWindow: true}, function(tabs) {
-    var tab = tabs[0];
-        if (tab !=undefined) {
-            tab_title = tab.title;
-            if (tab_title.includes("Amazon")) {
-                chrome.tabs.executeScript(tab.id, {
-                    file: 'tabExecute.js'
-                }, display_item);
-            }
-        }
-});
+//     var tab_title = '';
+//     chrome.tabs.query({active: true,status:'loading' ,lastFocusedWindow: true}, function(tabs) {
+//         var tab = tabs[0];
+//         if (tab !=undefined){
+//
+//             tab_title = tab.title;
+//             if(tab_title.includes("Amazon")){
+//                 chrome.tabs.executeScript(tab.id, {
+//                     file: 'tabExecute.js'
+//                 }, display_item);
+//             }
+//         }
+//     });
+//     chrome.tabs.query({active: true,status:'complete' ,lastFocusedWindow: true}, function(tabs) {
+//     var tab = tabs[0];
+//         if (tab !=undefined) {
+//             tab_title = tab.title;
+//             if (tab_title.includes("Amazon")) {
+//                 chrome.tabs.executeScript(tab.id, {
+//                     file: 'tabExecute.js'
+//                 }, display_item);
+//             }
+//         }
+// });
 function refreshFunction(){
     var d1 = document.createElement("div");
     d1.innerHTML='<meta http-equiv="refresh" content="0.2; url=https://www-student.cse.buffalo.edu/dontbuyme/popup.php">';
