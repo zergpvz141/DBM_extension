@@ -7,7 +7,7 @@
 - On the upper left, click the "Load unpacked" button and select the unzipped folder
 - If the extension icon not show on the right side of address bar, click on the puzzle icon on the right side of address bar, then click on the "Don't Buy Me" extension pin button to pin it on the right side of address bar.
 
-##User Manual##
+## User Manual ##
 **Currently the extension only support CD,DVD,Blu-Ray,Vinyl and Book categories on Amazon. Other items won't received any notification.**
 
 **This extension uses google login for user identification. Only the user email will be stored. We will not store any personal infomation of google account other than email address.**
